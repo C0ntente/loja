@@ -17,17 +17,12 @@ public class Main {
 		Cliente cliente1 = new Cliente();
 		cliente1.setId(1);
 		Pedido ped1 = new Pedido();
-		Pedido ped2 = new Pedido();
 
 		ped1.setId(1);
 		ped1.setData(new Date());
 		ped1.setStatus(StatusPedido.ANDAMENTO);
 		ped1.setCliente(cliente1);
-		ped2.setId(1);
-		ped2.setData(new Date());
-		ped2.setStatus(StatusPedido.ANDAMENTO);
-		ped2.setCliente(cliente1);
-
+		
 		Scanner scanner = new Scanner(System.in);
 		String entrada = ""; // criando String de entrada vazia, para inicializar
 		System.out.println("Entre com nome?");
