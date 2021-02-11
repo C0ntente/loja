@@ -10,8 +10,6 @@ import model.enums.StatusPedido;
 
 public class Main {
 
-	
-
 	public static void main(String[] args) {
 
 		Cliente cliente1 = new Cliente();
@@ -22,7 +20,7 @@ public class Main {
 		ped1.setData(new Date());
 		ped1.setStatus(StatusPedido.ANDAMENTO);
 		ped1.setCliente(cliente1);
-		
+
 		Scanner scanner = new Scanner(System.in);
 		String entrada = ""; // criando String de entrada vazia, para inicializar
 		System.out.println("Entre com nome?");
@@ -62,10 +60,14 @@ public class Main {
 //			preco = scanner.nextDouble();
 //			scanner.next(); // quando for double, int ou sem ser um string
 			p.setPreco(preco);
-			pedido.addProd(p);
-			pedido.getProdutos().contains(pedido);
+			if (pedido.getProdutos().contains(p)) {
+				System.out.println("Produto já inserido");
+			} else {
+				pedido.addProd(p);
+			}
 			System.out.println("Voce quer comprar um novo produto?");
 			cadastrar = scanner.nextLine();
+
 		}
 
 	}
