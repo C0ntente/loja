@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
-import exceptions.ProdutoExistenteException;
 import model.enums.StatusPedido;
 
 public class Pedido {
@@ -34,12 +33,8 @@ public class Pedido {
 				+ produtos + "]";
 	}
 
-	public void addProd(Produto p) throws ProdutoExistenteException { // metodo da classe para adiconar um produto dentro da classe
-		if (this.produtos.contains(p)) {
-			throw new ProdutoExistenteException();
-		}
+	public void addProd(Produto p) {
 		this.produtos.add(p);
-
 	}
 
 	public int getId() {
