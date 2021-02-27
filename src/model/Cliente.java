@@ -1,5 +1,10 @@
 package model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import exceptions.EmailInvalidoException;
+
 public class Cliente {
 
 	private String nome;
@@ -69,8 +74,12 @@ public class Cliente {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(String email) throws EmailInvalidoException {
+		if (validaEmail(email)) {
+			this.email = email;
+		}else
+			throw new EmailInvalidoException();
+
 	}
 
 	public String getSenha() {
@@ -87,6 +96,19 @@ public class Cliente {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	private boolean validaEmail(String email) {
+		if (email != null && email.length() > 0) {
+			String expression = "^[\\w\\.-\\_]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+			Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(email);
+//	        if (matcher.matches()) {
+//	            return true;
+//	     }
+			return matcher.matches();
+		}
+		return false;
 	}
 
 }

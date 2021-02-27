@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.NomeCurtoException;
+
+
 public class Produto {
 
 	private int id;
@@ -60,7 +63,11 @@ public class Produto {
 		return nome;
 	}
 
-	public void setNome(String nome) {
+	public void setNome(String nome) throws NomeCurtoException {
+		if (!validaNome(nome)) {
+			throw new NomeCurtoException();
+
+		}
 		this.nome = nome;
 	}
 
@@ -70,6 +77,12 @@ public class Produto {
 
 	public void setPreco(double preco) {
 		this.preco = preco;
+	}
+	private boolean validaNome(String provavelNome) {
+		if (provavelNome.length() >= 3) {
+			return true;
+		}else
+			return false;
 	}
 
 }
