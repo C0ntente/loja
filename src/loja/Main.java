@@ -2,8 +2,12 @@ package loja;
 
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
+import dao.ClienteDao;
+import exceptions.EmailInvalidoException;
+import exceptions.NomeCurtoException;
 import exceptions.ProdutoExistenteException;
 import model.Cliente;
 import model.Pedido;
@@ -13,16 +17,19 @@ import model.enums.StatusPedido;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		List<Cliente> clientes = ClienteDao.listar();
 
-		Pedido pedido = cadastrarPedido(); // chamando o metodo cadastrar pedido, atribui a uma variavel nova (pedido)
-		System.out.println("Inicializando programa " + pedido.toString() + "\n");
+//		Pedido pedido = cadastrarPedido(); // chamando o metodo cadastrar pedido, atribui a uma variavel nova (pedido)
+//		System.out.println("Inicializando programa " + pedido.toString() + "\n");
 //		Cliente cliente = cadastrarCliente();
 //		pedido.setCliente(cliente);// vinculei o cliente a este pedido, inclui um cliente a um pedido
-		System.out.println("Cliente cadastrado " + pedido.toString() + "\n");
-		adicionarProdutos(pedido); // chamando o método de adição de produtos com o pedido que ja esta cadastrado e
-									// com cliente
-
-		// System.out.printf(pedido.toString(), pedido.getCliente().toString());
+//		System.out.println("Cliente cadastrado " + pedido.toString() + "\n");
+//		adicionarProdutos(pedido); // chamando o método de adição de produtos com o pedido que ja esta cadastrado e
+//									// com cliente
+//
+//		System.out.printf(pedido.toString(), pedido.getCliente().toString());
+		System.out.println(clientes);
 
 	}
 
@@ -44,15 +51,24 @@ public class Main {
 
 		Scanner scanner = new Scanner(System.in);
 		String entrada = ""; // criando String de entrada vazia, para inicializar
-		System.out.println("Entre com nome?");
+		System.out.println("Entre com nome do cliente?");
 		entrada = scanner.nextLine();
 		cliente1.setNome(entrada);
 		System.out.println("Entre com cpf?");
 		entrada = scanner.nextLine();
 		cliente1.setCpf(entrada);
 		System.out.println("Entre com email?");
-		entrada = scanner.nextLine();
-		cliente1.setEmail(entrada);
+		while (true) {
+			try {
+				entrada = scanner.nextLine();
+				cliente1.setEmail(entrada);
+				break;
+
+			} catch (EmailInvalidoException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Entre com email válido");
+			}
+		}
 		System.out.println("Entre com senha?");
 		entrada = scanner.nextLine();
 		cliente1.setSenha(entrada);
@@ -65,6 +81,7 @@ public class Main {
 
 		while (cadastrar.equalsIgnoreCase("s")) { // metodo do java da classe string para comparar ignorando se é
 													// maiusculo ou minusculo
+
 			Produto p = new Produto();
 			idProduto++;
 			p.setId(idProduto);
@@ -72,8 +89,17 @@ public class Main {
 			String entrada = "";
 			double preco = 0;
 			System.out.println("Entre com nome do produto?");
-			entrada = scanner.nextLine();
-			p.setNome(entrada);// pedido.getProdutos().contains(p), antes de adicionar o preço eu consulto se o nome tem na lista
+			while (true) {
+				try {
+					entrada = scanner.nextLine();
+					p.setNome(entrada);
+					break;
+				} catch (NomeCurtoException e2) {
+					System.out.println(e2.getMessage());
+					System.out.println("Entre com nome do produto correto");
+				}
+			}
+
 			System.out.println("Entre com preço do produto?");
 			try {
 				preco = scanner.nextDouble();
