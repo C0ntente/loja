@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,7 +18,7 @@ public class ClienteDao {
 		List<Cliente> clientes = new ArrayList<Cliente>();
 		Connection conexaoBanco = ConnectionFactory.conexaoBanco();
 		try {
-			Statement stmt = conexaoBanco.createStatement();
+			Statement stmt = conexaoBanco.createStatement(); // simples sem parametro
 			ResultSet rs = stmt.executeQuery(listar);
 			while (rs.next()) {
 				Cliente cliente = new Cliente();
@@ -31,7 +32,8 @@ public class ClienteDao {
 					clientes.add(cliente);
 				} catch (EmailInvalidoException e) {
 					// TODO Auto-generated catch block
-					System.out.println("Cliente " + rs.getString("nome") + " Com email inválido. Email: " + rs.getString("email"));
+					System.out.println(
+							"Cliente " + rs.getString("nome") + " Com email inválido. Email: " + rs.getString("email"));
 				}
 
 			}
@@ -40,6 +42,31 @@ public class ClienteDao {
 			e.printStackTrace();
 		}
 		return clientes;
+	}
+
+	public static void inserir(Cliente cliente) {
+		String inserir = "INSERT INTO `loja`.`cliente` (`nome`, `cpf`, `email`, `senha`) VALUES (?, ?, ?, ?)";
+		Connection conexaoBanco = ConnectionFactory.conexaoBanco();
+		try {
+			PreparedStatement prepareStatement = conexaoBanco.prepareStatement(inserir);
+			prepareStatement.setString(1, cliente.getNome());
+			prepareStatement.setString(2, cliente.getCpf());
+			prepareStatement.setString(3, cliente.getEmail());
+			prepareStatement.setString(4, cliente.getSenha());
+			prepareStatement.execute();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conexaoBanco.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }

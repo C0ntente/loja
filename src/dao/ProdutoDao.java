@@ -27,7 +27,7 @@ public class ProdutoDao {
 			try {
 				produto.setId(rs.getInt(1));
 				produto.setNome(rs.getString("nome"));
-				produto.setPreco(rs.getInt("preço"));
+				produto.setPreco(rs.getInt("preco"));
 				
 				produtos.add(produto);
 			} catch (NomeCurtoException e) {

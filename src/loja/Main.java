@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.ClienteDao;
+import dao.ProdutoDao;
 import exceptions.EmailInvalidoException;
 import exceptions.NomeCurtoException;
 import exceptions.ProdutoExistenteException;
@@ -19,17 +20,25 @@ public class Main {
 	public static void main(String[] args) {
 		
 		List<Cliente> clientes = ClienteDao.listar();
+		for (Cliente cliente : clientes) {
+			System.out.println(clientes.indexOf(cliente) + " - " + cliente.getNome() + " - " + cliente.getCpf());
+			
+		}
+		//List<Produto> produtos = ProdutoDao.listar();
 
 //		Pedido pedido = cadastrarPedido(); // chamando o metodo cadastrar pedido, atribui a uma variavel nova (pedido)
 //		System.out.println("Inicializando programa " + pedido.toString() + "\n");
 //		Cliente cliente = cadastrarCliente();
+//		ClienteDao.inserir(cliente);
+//		clientes = ClienteDao.listar();
 //		pedido.setCliente(cliente);// vinculei o cliente a este pedido, inclui um cliente a um pedido
 //		System.out.println("Cliente cadastrado " + pedido.toString() + "\n");
 //		adicionarProdutos(pedido); // chamando o método de adição de produtos com o pedido que ja esta cadastrado e
 //									// com cliente
 //
 //		System.out.printf(pedido.toString(), pedido.getCliente().toString());
-		System.out.println(clientes);
+		//System.out.println(clientes);
+		//System.out.println(produtos);
 
 	}
 
@@ -47,7 +56,7 @@ public class Main {
 												// chamar
 
 		Cliente cliente1 = new Cliente();
-		cliente1.setId(1);
+		//cliente1.setId(1);
 
 		Scanner scanner = new Scanner(System.in);
 		String entrada = ""; // criando String de entrada vazia, para inicializar
