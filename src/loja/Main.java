@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.ClienteDao;
+import dao.ProdutoDao;
 import exceptions.EmailInvalidoException;
 import exceptions.NomeCurtoException;
 import exceptions.ProdutoExistenteException;
@@ -17,19 +18,31 @@ import model.enums.StatusPedido;
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		List<Cliente> clientes = ClienteDao.listar();
+//		for (Cliente cliente : clientes) {
+//			System.out.println(clientes.indexOf(cliente) + " - " + cliente.getNome() + " - " + cliente.getCpf());
+//
+//		}
+		excluirCliente(clientes);
+//		System.out.println();
+		// cadastrarProduto();
+
+		// List<Produto> produtos = ProdutoDao.listar();
 
 //		Pedido pedido = cadastrarPedido(); // chamando o metodo cadastrar pedido, atribui a uma variavel nova (pedido)
 //		System.out.println("Inicializando programa " + pedido.toString() + "\n");
 //		Cliente cliente = cadastrarCliente();
+//		ClienteDao.inserir(cliente);
+//		clientes = ClienteDao.listar();
 //		pedido.setCliente(cliente);// vinculei o cliente a este pedido, inclui um cliente a um pedido
 //		System.out.println("Cliente cadastrado " + pedido.toString() + "\n");
 //		adicionarProdutos(pedido); // chamando o método de adição de produtos com o pedido que ja esta cadastrado e
 //									// com cliente
 //
 //		System.out.printf(pedido.toString(), pedido.getCliente().toString());
-		System.out.println(clientes);
+		// System.out.println(clientes);
+		// System.out.println(produtos);
 
 	}
 
@@ -47,7 +60,7 @@ public class Main {
 												// chamar
 
 		Cliente cliente1 = new Cliente();
-		cliente1.setId(1);
+		// cliente1.setId(1);
 
 		Scanner scanner = new Scanner(System.in);
 		String entrada = ""; // criando String de entrada vazia, para inicializar
@@ -73,6 +86,58 @@ public class Main {
 		entrada = scanner.nextLine();
 		cliente1.setSenha(entrada);
 		return cliente1;
+	}
+
+	public static void excluirCliente(List<Cliente> clientes) {
+		Scanner scanner = new Scanner(System.in);
+		int i;
+		System.out.printf("\nInforme a posição a ser excluída: \n");
+		i = scanner.nextInt();
+		try {
+			Cliente cliente = clientes.get(i);
+			System.out.println(cliente.getNome());
+			ClienteDao.excluir(cliente); 
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Não existe cliente para opção selecionada");
+		}
+	}
+
+	public static void cadastrarProduto() {
+		Produto prod1 = new Produto();
+		Scanner scanner = new Scanner(System.in);
+		String entrada = "";
+		double preco = 0;
+		System.out.println("Entre com nome do produto:");
+		while (true) {
+			try {
+				entrada = scanner.nextLine();
+				prod1.setNome(entrada);
+				break;
+			} catch (NomeCurtoException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Digite um nome válido:");
+			}
+		}
+		while (true) {
+			System.out.println("Entre com preço do produto:");
+			try {
+				preco = scanner.nextDouble();
+				scanner.nextLine();
+				prod1.setPreco(preco);
+				break;
+
+			} catch (InputMismatchException e1) {
+				System.out.println("Digite um valor válido");
+				scanner = new Scanner(System.in);
+			}
+		}
+		boolean inserido = ProdutoDao.inserir(prod1);
+		if (inserido == true) {
+			System.out.println("Produto inserido com sucesso!!!");
+		} else {
+			System.out.println("Erro ao inserir produto!!");
+		}
+
 	}
 
 	public static void adicionarProdutos(Pedido pedido) { // metodo da interface
