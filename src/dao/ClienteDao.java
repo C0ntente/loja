@@ -14,10 +14,12 @@ import model.Cliente;
 
 public class ClienteDao {
 	public static List<Cliente> listar() {
+		Connection conexaoBanco = null;
 		String listar = "select * from cliente";
 		List<Cliente> clientes = new ArrayList<Cliente>();
-		Connection conexaoBanco = ConnectionFactory.conexaoBanco();
+
 		try {
+			conexaoBanco = ConnectionFactory.conexaoBanco();
 			Statement stmt = conexaoBanco.createStatement(); // simples sem parametro
 			ResultSet rs = stmt.executeQuery(listar);
 			while (rs.next()) {
@@ -40,14 +42,25 @@ public class ClienteDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (conexaoBanco != null) {
+					conexaoBanco.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return clientes;
 	}
 
 	public static void inserir(Cliente cliente) {
+		Connection conexaoBanco = null;
 		String inserir = "INSERT INTO `loja`.`cliente` (`nome`, `cpf`, `email`, `senha`) VALUES (?, ?, ?, ?)";
-		Connection conexaoBanco = ConnectionFactory.conexaoBanco();
+
 		try {
+			conexaoBanco = ConnectionFactory.conexaoBanco();
 			PreparedStatement prepareStatement = conexaoBanco.prepareStatement(inserir);
 			prepareStatement.setString(1, cliente.getNome());
 			prepareStatement.setString(2, cliente.getCpf());
@@ -60,13 +73,38 @@ public class ClienteDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				conexaoBanco.close();
+				if (conexaoBanco != null) {
+					conexaoBanco.close();
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
 	}
 
+	public static void excluir(Cliente cliente) {
+		Connection conexaoBanco = null;
+		String excluir = "DELETE FROM cliente WHERE id = ?";
+		try {
+			conexaoBanco = ConnectionFactory.conexaoBanco();
+			PreparedStatement prepareStatement = conexaoBanco.prepareStatement(excluir);
+			prepareStatement.setInt(1, cliente.getId());
+			prepareStatement.execute();
+			System.out.println("Excluido com sucesso");
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao excluir");
+			;
+		} finally {
+			try {
+				if (conexaoBanco != null) {
+					conexaoBanco.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
